@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { StoreProvider } from "@/store/StoreProvider";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,17 +12,40 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "Tasks — Modern task management for teams",
-    template: "%s | Tasks",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "Plan, prioritize, and ship work faster. Task management with analytics, secure auth, and a UI your team will love.",
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "Tasks — Modern task management for teams",
-    description: "Plan, prioritize, and ship work faster with Tasks.",
     type: "website",
+    locale: siteConfig.locale,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.shortDescription,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.shortDescription,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#4f46e5" },
+    { media: "(prefers-color-scheme: dark)", color: "#312e81" },
+  ],
 };
 
 export default function RootLayout({
